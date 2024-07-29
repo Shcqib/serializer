@@ -11,25 +11,28 @@
 
 int sockfd = 0;
 char message[100];
-char buffer[1024];
+unsigned char buffer[1024];
 
 void promptUserForString(char *string);
 void *receiveMessageFromServer(void *arg);
 void clientSocket();
-void serializeFriendRequest(FriendRequest *request, char *buffer);
+void serializeMessage(MessageType *type, void *data, size_t dataSize, unsigned char *buffer);
 
 int main(void) {
 	clientSocket();
-	FriendRequest request = {"Alice", "Bob", "I want to be your friend"};
-	serializeFriendRequest(&request, buffer);
+	Data request = {"user1", "user2", "Wants to be your friend"};
+	serializeMessage(FRIEND_REQUEST, &request, sizeof(Data), buffer);
+	Data request2 = {"user1", "user2", "Sent you a message"};
+	serializeMessage(SEND_MESSAGE, &request2, sizeof(Data), buffer);"
+	printf("sending buffer = %s", buffer);
 }
 
-void serializeFriendRequest(FriendRequest *request, char *buffer) {
-    buffer[0] = 1;
-    buffer[1] = sizeof(FriendRequest); 
-    memcpy(buffer + 2, request, sizeof(FriendRequest)); 
+void serializeMessage(MessageType *type, void *data, size_t dataSize, unsigned char *buffer) {
+    buffer[0] = (unsigned char)type;
+    buffer[1] = (unsigned char)dataSize; 
+    memcpy(buffer + 2, data, dataSize); 
 
-	send(sockfd, buffer, strlen(buffer) + 1, 0);
+	send(sockfd, buffer, 2 + sizeof(FriendRequest), 0);
 }
 
 void promptUserForString(char *string) {
