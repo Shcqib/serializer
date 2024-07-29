@@ -48,9 +48,9 @@ int main() {
 
         if (fds[1].revents & POLLIN) {
             read(0, buffer, BUFFER_SIZE - 1);
-            buffer[strlen(buffer) - 1] = '\0';
+            buffer[strlen((const char *)buffer) - 1] = '\0';
             for (int i = 2; i <= num_clients + 1; i++) {
-                send(fds[i].fd, buffer, strlen(buffer) + 1, 0);
+                send(fds[i].fd, buffer, strlen((const char *)buffer) + 1, 0);
             }
         }
 

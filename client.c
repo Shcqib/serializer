@@ -23,21 +23,22 @@ int main(void) {
 	clientSocket();
 	Data request = {"user1", "user2", "Wants to be your friend"};
 	serializeMessage(FRIEND_REQUEST, &request, sizeof(Data), buffer);
-	printf("sending buffer = %s", buffer);
+	printf("sending buffer = %s\n", buffer);
 
 	buffer[0] = '\0';
 
 	Data request2 = {"user3", "user4", "Sent you a message"};
 	serializeMessage(SEND_MESSAGE, &request2, sizeof(Data), buffer);
-	printf("sending buffer = %s", buffer);
+	printf("sending Message to server %s\n", buffer);
+	printf("sending buffer = %s\n", buffer);
 }
 
 void serializeMessage(MessageType type, void *data, size_t dataSize, unsigned char *buffer) {
-    buffer[0] = (unsigned char)type;
-    buffer[1] = (unsigned char)dataSize; 
+    buffer[0] = type;
+    buffer[1] = dataSize; 
     memcpy(buffer + 2, data, dataSize); 
 
-	send(sockfd, buffer, 2 + dataSize, 0);
+	send(sockfd, buffer, dataSize + 2, 0);
 }
 
 void promptUserForString(char *string) {

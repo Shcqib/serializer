@@ -9,11 +9,11 @@
 
 #define MAX_LINE_LENGTH 256
 
-void deserializeMessage(unsigned char *buffer) {
-    MessageType type = buffer[0];
-    size_t dataSize = (size_t)buffer[1];
+void deserializeMessage(unsigned char *message) {
+    MessageType type = message[0];
+    size_t dataSize = (size_t)message[1];
 	Data *request;
-	memcpy(request, buffer + 2, dataSize); 
+	memcpy(request, message + 2, dataSize); 
 
     switch (type) {
         case FRIEND_REQUEST: {
@@ -36,6 +36,6 @@ void deserializeMessage(unsigned char *buffer) {
     }
 }
 
-void handleCommand(unsigned char *buffer, int clientfd) {
-	deserializeMessage(buffer);
+void handleCommand(unsigned char *message, int clientfd) {
+	deserializeMessage(message);
 }
