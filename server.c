@@ -29,12 +29,12 @@ int main() {
     int num_clients = 0;
 
     for (;;) {
-        char buffer[BUFFER_SIZE] = {0};
+        unsigned char buffer[BUFFER_SIZE] = {0};
 
         fds[1].fd = 0;
         fds[1].events = POLLIN;
 
-        int poll_count = poll(fds, num_clients + 2, -1);
+    int poll_count = poll(fds, num_clients + 2, -1);
 
         if (fds[0].revents & POLLIN) {
             int clientfd = accept(sockfd, NULL, NULL);
@@ -45,8 +45,8 @@ int main() {
             }
 
         }
-		
-		if (fds[1].revents & POLLIN) {
+
+        if (fds[1].revents & POLLIN) {
             read(0, buffer, BUFFER_SIZE - 1);
             buffer[strlen(buffer) - 1] = '\0';
             for (int i = 2; i <= num_clients + 1; i++) {
@@ -55,7 +55,6 @@ int main() {
         }
 
         for (int i = 2; i <= num_clients + 1; i++) {
-			buffer[0] = '\0';
             if (fds[i].revents & POLLIN) {
                 int bytes_received = recv(fds[i].fd, buffer, BUFFER_SIZE - 1, 0);
                 if (bytes_received <= 0) {
@@ -71,7 +70,7 @@ int main() {
                 }
             }
         }
-    }
+	}
 
     return 0;
 }

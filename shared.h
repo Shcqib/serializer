@@ -20,6 +20,6 @@ typedef struct {
 	char data[];
 } Message;
 
-void handleCommand(char *buffer, int clientfd);
+void handleCommand(unsigned char *buffer, int clientfd);
 
 #endif
